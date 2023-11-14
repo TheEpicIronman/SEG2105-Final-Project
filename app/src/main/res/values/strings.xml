@@ -1,0 +1,62 @@
+<resources>
+    <string name="app_name">GCCApp</string>
+
+    <string name="app_title">GCC Cycling</string>
+    <string name="registration_title">GCC Cycling Registration</string>
+
+    <string name="username_hint">(Please enter your username)</string>
+    <string name="username_label">Username</string>
+
+    <string name="email_hint">(Please enter your email)</string>
+    <string name="email_label">Email</string>
+
+    <string name="password_hint">(Please enter your password)</string>
+    <string name="password_label">Password</string>
+    <string name="password_confirm_hint">(Please enter your password again)</string>
+    <string name="password_confirm_label">Confirm your Password</string>
+
+    <string name="login_button_text">LOGIN</string>
+    <string name="register_button_text">REGISTER</string>
+
+    <string name="welcome_title">WELCOME</string>
+
+    <string name="event_type_hint">Event Type</string>
+    <string name="event_details_hint">Event Details</string>
+    <string name="reg_req_hint">Registration Requirements</string>
+    <string name="addevent_button_text">Add Event</string>
+    <string name="add_events_button_text">Add Events</string>
+
+    <string name="age_hint">Age</string>
+    <string name="pace_hint">Pace</string>
+    <string name="level_hint">Level</string>
+
+
+    <string-array name="event_details">
+        <item>Date</item>
+        <item>Time</item>
+        <item>Location</item>
+        <item>Description</item>
+        <item>Distance</item>
+        <item>Elevation Gain</item>
+        <item>Difficulty</item>
+    </string-array>
+
+    <string-array name="registration_requirements">
+        <item>Age</item>
+        <item>Pace</item>
+        <item>Level</item>
+        <item>Other</item>
+    </string-array>
+
+    <string name="role_title">ROlE</string>
+    <string name="selected_role" />
+
+    <string name="roles_hint">(Please choose a role)</string>
+    <string-array name="roles_array">
+        <item>Administrator</item>
+        <item>Participant</item>
+        <item>Organizer</item>
+    </string-array>
+
+
+</resources>

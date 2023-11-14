@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "791502300555",
+    "project_id": "gcc-ac512",
+    "storage_bucket": "gcc-ac512.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:791502300555:android:5c71230587a82cde587b8e",
+        "android_client_info": {
+          "package_name": "com.uottawa.gcc"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyIT5F-fRVaxVeC1hlzVdvYk8tMO2DKfg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
