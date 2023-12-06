@@ -1,5 +1,7 @@
 package com.uottawa.gcc;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,13 +15,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AddEventActivity extends AppCompatActivity {
-    private Spinner eventTypeSpinner;
-    private EditText eventDetailsEditText;
-    private Spinner levelSpinner;
     private Button addEventButton;
-    private Button editEventButton;
-    private Button deleteEventButton;
+    private Button backButton;
     private DatabaseHelper dbHelper;
+    private Spinner eventTypeSpinner;
+    private Spinner eventAgeSpinner;
+    private Spinner difficultySpinner;
+    private EditText eventNameEditText;
+    private EditText eventDescriptionEditText;
+    private EditText eventDateEditText;
+    private EditText eventLocationEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,124 +33,96 @@ public class AddEventActivity extends AppCompatActivity {
 
         dbHelper = new DatabaseHelper(this);
 
-        // Initialize UI elements
+        eventNameEditText = findViewById(R.id.eventNameEditText);
+        eventDescriptionEditText = findViewById(R.id.eventDescEditText);
+        eventDateEditText = findViewById(R.id.eventDateEditText);
+        eventLocationEditText = findViewById(R.id.eventLocationEditText);
         eventTypeSpinner = findViewById(R.id.eventTypeSpinner);
-        eventDetailsEditText = findViewById(R.id.eventDetailsEditText);
-        levelSpinner = findViewById(R.id.levelSpinner);
-        addEventButton = findViewById(R.id.addEventButton);
-        editEventButton = findViewById(R.id.editEventButton);
-        deleteEventButton = findViewById(R.id.deleteEventButton);
+        eventAgeSpinner = findViewById(R.id.eventAgeSpinner);
+        difficultySpinner = findViewById(R.id.eventDifficultySpinner);
 
-        // Setup Spinners
-        setupEventTypeSpinner();
-        setupLevelSpinner();
+        setupSpinners();
 
-        // Add event button click listener
+        addEventButton = findViewById(R.id.completeEventButton);
         addEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Get user input
-                String eventType = eventTypeSpinner.getSelectedItem().toString();
-                String eventDetails = eventDetailsEditText.getText().toString();
-                String level = levelSpinner.getSelectedItem().toString();
-
-                // Add event to the database
-                long result = addEventToDatabase(eventType, eventDetails, level);
-
-                if (result != -1) {
-                    Toast.makeText(AddEventActivity.this, "Event added successfully", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(AddEventActivity.this, "Error adding event", Toast.LENGTH_SHORT).show();
-                }
+                addEvent();
+                Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
+                startActivity(intent);
             }
         });
 
-        // Edit event button click listener
-        editEventButton.setOnClickListener(new View.OnClickListener() {
+        backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Get user input
-                String eventType = eventTypeSpinner.getSelectedItem().toString();
-                String eventDetails = eventDetailsEditText.getText().toString();
-                String level = levelSpinner.getSelectedItem().toString();
-
-                // Edit event in the database
-                int result = editEventInDatabase(Integer.parseInt(eventType), eventType, eventDetails, level);
-
-                if (result > 0) {
-                    Toast.makeText(AddEventActivity.this, "Event edited successfully", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(AddEventActivity.this, "Error editing event", Toast.LENGTH_SHORT).show();
-                }
+                Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
+                startActivity(intent);
             }
         });
+    }
 
-        // Delete event button click listener
-        deleteEventButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Get user input
-                String eventType = eventTypeSpinner.getSelectedItem().toString();
+    private void addEvent() {
+        String name = eventNameEditText.getText().toString();
+        String description = eventDescriptionEditText.getText().toString();
+        String date = eventDateEditText.getText().toString();
+        String location = eventLocationEditText.getText().toString();
+        String type = eventTypeSpinner.getSelectedItem().toString();
+        String ageRange = eventAgeSpinner.getSelectedItem().toString();
+        String difficulty = difficultySpinner.getSelectedItem().toString();
 
-                // Delete event from the database
-                int result = deleteEventFromDatabase(Integer.parseInt(eventType));
+        SharedPreferences sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
+        int userID = sharedPreferences.getInt("userID", 0);
 
-                if (result > 0) {
-                    Toast.makeText(AddEventActivity.this, "Event deleted successfully", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(AddEventActivity.this, "Error deleting event", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        long result = dbHelper.insertEvent(userID, type, name, description, date, ageRange, difficulty, location);
+
+        if (result > 0) {
+            Toast.makeText(this, "Event added successfully", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Error adding event", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void setupSpinners() {
+        setupEventTypeSpinner();
+        setupAgeRangeSpinner();
+        setupDifficultySpinner();
+    }
+
+    private void setupAgeRangeSpinner() {
+        List<String> ageRanges = new ArrayList<>();
+        ageRanges.add("15-19");
+        ageRanges.add("20-24");
+        ageRanges.add("25-29");
+        ageRanges.add("30-34");
+        ageRanges.add("35-39");
+        ageRanges.add("40+");
+
+        ArrayAdapter<String> ageRangeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, ageRanges);
+        ageRangeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        eventAgeSpinner.setAdapter(ageRangeAdapter);
+    }
+
+    private void setupDifficultySpinner() {
+        List<String> difficulties = new ArrayList<>();
+        difficulties.add("Easy");
+        difficulties.add("Intermediate");
+        difficulties.add("Challenging");
+
+        ArrayAdapter<String> difficultyAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, difficulties);
+        difficultyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        difficultySpinner.setAdapter(difficultyAdapter);
     }
 
     private void setupEventTypeSpinner() {
         List<String> eventTypes = new ArrayList<>();
-        // Add event types (modify as needed)
         eventTypes.add("Time Trial");
         eventTypes.add("Hill Climb");
         eventTypes.add("Road Stage Race");
-        eventTypes.add("Other");
-        // Add more event types...
 
         ArrayAdapter<String> eventTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, eventTypes);
         eventTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         eventTypeSpinner.setAdapter(eventTypeAdapter);
-    }
-
-    private void setupLevelSpinner() {
-        List<String> levels = new ArrayList<>();
-        // Add levels (modify as needed)
-        levels.add("Beginner");
-        levels.add("Intermediate");
-        levels.add("Advanced");
-        // Add more levels...
-
-        ArrayAdapter<String> levelAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, levels);
-        levelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        levelSpinner.setAdapter(levelAdapter);
-    }
-
-    private long addEventToDatabase(String eventType, String eventDetails, String level) {
-        dbHelper = new DatabaseHelper(this);
-        long result = dbHelper.insertEvent(eventType, eventDetails, level);
-
-        if (result != -1) {
-            Log.d("AddEventActivity", "Event added successfully. Row ID: " + result);
-        } else {
-            Log.e("AddEventActivity", "Error adding event");
-        }
-
-        return result;
-    }
-
-    private int editEventInDatabase(int eventID, String eventType, String eventDetails, String level) {
-        dbHelper = new DatabaseHelper(this);
-        return dbHelper.updateEvent(eventID, eventType, eventDetails, level);
-    }
-
-    private int deleteEventFromDatabase(int eventID) {
-        dbHelper = new DatabaseHelper(this);
-        return dbHelper.deleteEvent(eventID);
     }
 }

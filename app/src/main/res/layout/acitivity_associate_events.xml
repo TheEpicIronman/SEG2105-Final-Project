@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- associate_events.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="114dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Events to Associate with Your Club"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <CheckBox
+        android:id="@+id/checkBoxEvent1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Event 1" />
+
+    <CheckBox
+        android:id="@+id/checkBoxEvent2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Event 2" />
+
+    <!-- Add more checkboxes for other events -->
+
+    <Button
+        android:id="@+id/buttonAssociateEvents"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="Associate Events" />
+
+</LinearLayout>

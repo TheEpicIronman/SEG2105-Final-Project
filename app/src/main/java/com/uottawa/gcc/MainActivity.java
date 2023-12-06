@@ -1,6 +1,7 @@
 package com.uottawa.gcc;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -29,6 +30,10 @@ public class MainActivity extends AppCompatActivity {
         // COMMENT OUT THE BELOW WHEN WORKING ON REGISTRATION OTHERWISE IT WILL GET DELETED AND
         // REVERT TO THE ADMIN AND USER ACCOUNT ONLY
         this.deleteDatabase(DatabaseHelper.DATABASE_NAME);
+        SharedPreferences sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
 
         dbHelper = new DatabaseHelper(this);  // Initialize DB Helper
 
@@ -53,7 +58,10 @@ public class MainActivity extends AppCompatActivity {
                 if (authenticateUser(username, password)) {
                     // Transition to the welcome activity class
                     Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);
-                    intent.putExtra("username", username);
+//                    intent.putExtra("username", username);
+                    SharedPreferences sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
+                    int userID = sharedPreferences.getInt("userID", 0);
+                    Log.d("DEBUG", "I was triggered in function! " + userID);
                     startActivity(intent);
                 } else {
                     Toast.makeText(MainActivity.this, "Invalid username or password!", Toast.LENGTH_SHORT).show();
@@ -86,9 +94,25 @@ public class MainActivity extends AppCompatActivity {
 
         Cursor cursor = db.query(DatabaseHelper.TABLE_USERS, projection, selection, selectionArgs, null, null, null);
         boolean userExists = (cursor.getCount() > 0);
-        cursor.close();
 
-        return userExists;
+        if(userExists) {
+            cursor.moveToFirst(); // Move to first row of the cursor
+            int columnIndexID = cursor.getColumnIndex(DatabaseHelper.COLUMN_ID);
+            int userID = cursor.getInt(columnIndexID);
+            cursor.close(); // Close the cursor after retrieving data
+
+            SharedPreferences sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt("userID", userID);
+            editor.apply();
+
+            Log.d("DEBUG", "User authenticated with ID: " + userID);
+            return true;
+        } else {
+            cursor.close(); // Make sure to close the cursor here as well
+            return false;
+        }
     }
+
 
 }

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".AddEventActivity">
+    tools:context=".EventPage">
 
     <Space
         android:layout_width="match_parent"
@@ -21,7 +21,8 @@
         android:id="@+id/eventNameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:enabled="false" />
 
     <!-- Event Description -->
     <TextView
@@ -33,7 +34,8 @@
         android:id="@+id/eventDescEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:enabled="false" />
 
     <!-- Event Date -->
     <TextView
@@ -45,7 +47,8 @@
         android:id="@+id/eventDateEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:enabled="false" />
 
     <!-- Event Location -->
     <TextView
@@ -57,7 +60,8 @@
         android:id="@+id/eventLocationEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:enabled="false" />
 
     <!-- Event Type -->
     <TextView
@@ -68,7 +72,8 @@
     <Spinner
         android:id="@+id/eventTypeSpinner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:enabled="false" />
 
     <!-- Age Range -->
     <TextView
@@ -79,7 +84,8 @@
     <Spinner
         android:id="@+id/eventAgeSpinner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:enabled="false" />
 
     <!-- Difficulty -->
     <TextView
@@ -90,19 +96,28 @@
     <Spinner
         android:id="@+id/eventDifficultySpinner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:enabled="false" />
 
     <Space
         android:layout_width="match_parent"
         android:layout_height="48dp" />
 
     <Button
-        android:id="@+id/completeEventButton"
+        android:id="@+id/editEventButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:backgroundTint="#C0B7D3"
-        android:text="Finish Adding Event" />
+        android:text="Edit Event" />
+
+    <Button
+        android:id="@+id/deleteEventButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="#C0B7D3"
+        android:text="Delete Event" />
 
     <Button
         android:id="@+id/backButton"

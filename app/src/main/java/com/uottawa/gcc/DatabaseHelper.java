@@ -23,9 +23,14 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     // Events column names
     public static final String COLUMN_EVENT_ID = "event_id";
+    public static final String COLUMN_USER_ID = "user_id"; // Column for the user ID
     public static final String COLUMN_EVENT_TYPE = "event_type";
-    public static final String COLUMN_EVENT_DETAILS = "event_details";
-    public static final String COLUMN_LEVEL = "level";
+    public static final String COLUMN_EVENT_NAME = "event_name"; // Column for the event name
+    public static final String COLUMN_EVENT_DESCRIPTION = "event_description"; // Column for the event description
+    public static final String COLUMN_EVENT_DATE = "event_date"; // Column for the event date
+    public static final String COLUMN_AGE_RANGE = "age_range"; // Column for the age range
+    public static final String COLUMN_DIFFICULTY = "difficulty"; // Column for the difficulty
+    public static final String COLUMN_LOCATION = "location"; // Column for the location
 
     // Create table query
     private static final String CREATE_TABLE_USERS = "CREATE TABLE " + TABLE_USERS + "("
@@ -36,9 +41,16 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             + COLUMN_ROLE + " TEXT NOT NULL" + ")";
     private static final String CREATE_TABLE_EVENTS = "CREATE TABLE " + TABLE_EVENTS + "("
             + COLUMN_EVENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-            + COLUMN_EVENT_TYPE + " TEXT NOT NULL,"
-            + COLUMN_EVENT_DETAILS + " TEXT NOT NULL,"
-            + COLUMN_LEVEL + " TEXT NOT NULL" + ")";
+            + COLUMN_USER_ID + " INTEGER NOT NULL," // User ID of the person who created the event
+            + COLUMN_EVENT_TYPE + " TEXT NOT NULL," // Type of the event
+            + COLUMN_EVENT_NAME + " TEXT NOT NULL," // Name of the event
+            + COLUMN_EVENT_DESCRIPTION + " TEXT NOT NULL," // Description of the event
+            + COLUMN_EVENT_DATE + " TEXT NOT NULL," // Date of the event
+            + COLUMN_AGE_RANGE + " TEXT NOT NULL," // Age range for participants
+            + COLUMN_DIFFICULTY + " TEXT NOT NULL," // Difficulty of the event
+            + COLUMN_LOCATION + " TEXT NOT NULL" // Location of the event
+            + ")";
+
 
 
     // As this is a subclass of the SQLiteOpenHelper, it follows the same properties which will
@@ -84,9 +96,14 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         db.insert(TABLE_USERS, null, userOrganizerValues);
 
         ContentValues eventValues = new ContentValues();
-        eventValues.put(COLUMN_EVENT_TYPE, "Event");
-        eventValues.put(COLUMN_EVENT_DETAILS, "This is Cool!");
-        eventValues.put(COLUMN_LEVEL, "Varsity");
+        eventValues.put(COLUMN_USER_ID, 0);
+        eventValues.put(COLUMN_EVENT_TYPE, "Time Trial");
+        eventValues.put(COLUMN_EVENT_NAME, "Hiking Adventure");
+        eventValues.put(COLUMN_EVENT_DESCRIPTION, "Join us for an exhilarating hiking experience in the mountains!");
+        eventValues.put(COLUMN_EVENT_DATE, "2023-12-15"); // date in YYYY-MM-DD
+        eventValues.put(COLUMN_AGE_RANGE, "25-29");
+        eventValues.put(COLUMN_DIFFICULTY, "Intermediate");
+        eventValues.put(COLUMN_LOCATION, "Blue Ridge Mountains");
         db.insert(TABLE_EVENTS, null, eventValues);
     }
 
@@ -99,24 +116,35 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     }
 
     // Method to add an event to the database
-    public long insertEvent(String eventType, String eventDetails, String level) {
+    public long insertEvent(int userID, String eventType, String eventName, String eventDescription, String eventDate, String ageRange, String difficulty, String location){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
+        values.put(COLUMN_USER_ID, userID);
         values.put(COLUMN_EVENT_TYPE, eventType);
-        values.put(COLUMN_EVENT_DETAILS, eventDetails);
-        values.put(COLUMN_LEVEL, level);
+        values.put(COLUMN_EVENT_NAME, eventName);
+        values.put(COLUMN_EVENT_DESCRIPTION, eventDescription);
+        values.put(COLUMN_EVENT_DATE, eventDate);
+        values.put(COLUMN_AGE_RANGE, ageRange);
+        values.put(COLUMN_DIFFICULTY, difficulty);
+        values.put(COLUMN_LOCATION, location);
         return db.insert(TABLE_EVENTS, null, values);
     }
 
     // Method to edit an existing event in the database
-    public int updateEvent(int eventID, String eventType, String eventDetails, String level) {
+    public int updateEvent(int eventID, int userID, String eventType, String eventName, String eventDescription, String eventDate, String ageRange, String difficulty, String location) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
+        values.put(COLUMN_USER_ID, userID);
         values.put(COLUMN_EVENT_TYPE, eventType);
-        values.put(COLUMN_EVENT_DETAILS, eventDetails);
-        values.put(COLUMN_LEVEL, level);
+        values.put(COLUMN_EVENT_NAME, eventName);
+        values.put(COLUMN_EVENT_DESCRIPTION, eventDescription);
+        values.put(COLUMN_EVENT_DATE, eventDate);
+        values.put(COLUMN_AGE_RANGE, ageRange);
+        values.put(COLUMN_DIFFICULTY, difficulty);
+        values.put(COLUMN_LOCATION, location);
         return db.update(TABLE_EVENTS, values, COLUMN_EVENT_ID + " = ?", new String[] { String.valueOf(eventID) });
     }
+
 
     // Method to delete an event from the database
     public int deleteEvent(int eventID) {
