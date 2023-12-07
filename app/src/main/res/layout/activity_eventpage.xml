@@ -141,4 +141,12 @@
         android:backgroundTint="#C0B7D3"
         android:text="Back" />
 
+    <Button
+        android:id="@+id/checkRegistrations"
+        android:layout_width="196dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="#C0B7D3"
+        android:text="Check Registrations" />
+
 </LinearLayout>

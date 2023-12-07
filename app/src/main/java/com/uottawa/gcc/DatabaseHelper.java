@@ -2,8 +2,12 @@ package com.uottawa.gcc;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper{
     // DB info
@@ -13,6 +17,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     // Table name
     public static final String TABLE_USERS = "users";
     public static final String TABLE_EVENTS = "events";
+    public static final String TABLE_REGISTRATIONS = "registrations";
 
     // Users column names
     public static final String COLUMN_ID = "id";
@@ -23,14 +28,20 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     // Events column names
     public static final String COLUMN_EVENT_ID = "event_id";
-    public static final String COLUMN_USER_ID = "user_id"; // Column for the user ID
+    public static final String COLUMN_USER_ID = "user_id";
     public static final String COLUMN_EVENT_TYPE = "event_type";
-    public static final String COLUMN_EVENT_NAME = "event_name"; // Column for the event name
-    public static final String COLUMN_EVENT_DESCRIPTION = "event_description"; // Column for the event description
-    public static final String COLUMN_EVENT_DATE = "event_date"; // Column for the event date
-    public static final String COLUMN_AGE_RANGE = "age_range"; // Column for the age range
-    public static final String COLUMN_DIFFICULTY = "difficulty"; // Column for the difficulty
-    public static final String COLUMN_LOCATION = "location"; // Column for the location
+    public static final String COLUMN_EVENT_NAME = "event_name";
+    public static final String COLUMN_EVENT_DESCRIPTION = "event_description";
+    public static final String COLUMN_EVENT_DATE = "event_date";
+    public static final String COLUMN_AGE_RANGE = "age_range";
+    public static final String COLUMN_DIFFICULTY = "difficulty";
+    public static final String COLUMN_LOCATION = "location";
+
+    // Registration column names
+
+    public static final String COLUMN_REGISTRATION_ID = "registration_id";
+    public static final String COLUMN_REGISTER_EVENT_ID = "event_id";
+    public static final String COLUMN_REGISTER_USER_ID = "user_id";
 
     // Create table query
     private static final String CREATE_TABLE_USERS = "CREATE TABLE " + TABLE_USERS + "("
@@ -51,6 +62,10 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             + COLUMN_LOCATION + " TEXT NOT NULL"
             + ")";
 
+    private static final String CREATE_TABLE_REGISTRATIONS = "CREATE TABLE " + TABLE_REGISTRATIONS + "("
+            + COLUMN_REGISTRATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + COLUMN_REGISTER_USER_ID + " INTEGER NOT NULL,"
+            + COLUMN_REGISTER_EVENT_ID + " INTEGER NOT NULL" + ")";
 
 
     // As this is a subclass of the SQLiteOpenHelper, it follows the same properties which will
@@ -64,6 +79,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_USERS);
         db.execSQL(CREATE_TABLE_EVENTS);
+        db.execSQL(CREATE_TABLE_REGISTRATIONS);
 
         // Insert initial data
         insertInitialData(db);
@@ -112,6 +128,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         // Drop older table if exists and create a new one
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENTS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_REGISTRATIONS);
         onCreate(db);
     }
 
@@ -145,10 +162,55 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         return db.update(TABLE_EVENTS, values, COLUMN_EVENT_ID + " = ?", new String[] { String.valueOf(eventID) });
     }
 
-
     // Method to delete an event from the database
     public int deleteEvent(int eventID) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TABLE_EVENTS, COLUMN_EVENT_ID + " = ?", new String[] { String.valueOf(eventID) });
     }
+
+    public long addRegistration(int userID, int eventID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_USER_ID, userID);
+        values.put(COLUMN_EVENT_ID, eventID);
+        return db.insert(TABLE_REGISTRATIONS, null, values);
+    }
+
+    public int deleteRegistration(int userID, int eventID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(TABLE_REGISTRATIONS, COLUMN_USER_ID + " = ? AND " + COLUMN_EVENT_ID + " = ?",
+                new String[]{String.valueOf(userID), String.valueOf(eventID)});
+    }
+
+    public boolean isUserRegisteredForEvent(int userID, int eventID) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = {COLUMN_REGISTRATION_ID};
+        String selection = COLUMN_USER_ID + " = ? AND " + COLUMN_EVENT_ID + " = ?";
+        String[] selectionArgs = {String.valueOf(userID), String.valueOf(eventID)};
+        Cursor cursor = db.query(TABLE_REGISTRATIONS, columns, selection, selectionArgs, null, null, null);
+        boolean isRegistered = cursor.getCount() > 0;
+        cursor.close();
+        return isRegistered;
+    }
+
+    public List<String> getRegisteredUsersForEvent(int eventID) {
+        List<String> registeredUsers = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT u." + COLUMN_USERNAME +
+                " FROM " + TABLE_USERS + " u INNER JOIN " + TABLE_REGISTRATIONS + " r " +
+                "ON u." + COLUMN_ID + " = r." + COLUMN_USER_ID +
+                " WHERE r." + COLUMN_EVENT_ID + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(eventID)});
+
+        if (cursor.moveToFirst()) {
+            do {
+                int registeredUsersColumn = cursor.getColumnIndex(COLUMN_USERNAME);
+                registeredUsers.add(cursor.getString(registeredUsersColumn));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return registeredUsers;
+    }
+
+
 }

@@ -1,5 +1,6 @@
 package com.uottawa.gcc;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -23,6 +25,7 @@ public class EventPage extends AppCompatActivity {
     private Button deleteEventButton;
     private Button backButton;
     private Button registerEvent;
+    private Button checkRegistrations;
     private DatabaseHelper dbHelper;
     private boolean isEditMode = false;
     private Spinner eventTypeSpinner;
@@ -118,16 +121,6 @@ public class EventPage extends AppCompatActivity {
             }
         });
 
-        if (user != null) {
-            if ("Administrator".equals(user.getRole()) || "Organizer".equals(user.getRole())) {
-                editEventButton.setVisibility(View.VISIBLE);
-                deleteEventButton.setVisibility(View.VISIBLE);
-            }else{
-                editEventButton.setVisibility(View.GONE);
-                deleteEventButton.setVisibility(View.GONE);
-            }
-        }
-
         backButton = findViewById(R.id.backButtonManage);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,10 +134,29 @@ public class EventPage extends AppCompatActivity {
         registerEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), ManageEvents.class);
-                startActivity(intent);
+                handleRegistrationToggle(eventID);
             }
         });
+
+        checkRegistrations = findViewById(R.id.checkRegistrations);
+        checkRegistrations.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showRegisteredUsersDialog(eventID);
+            }
+        });
+
+        if (user != null) {
+            if ("Administrator".equals(user.getRole()) || "Organizer".equals(user.getRole())) {
+                editEventButton.setVisibility(View.VISIBLE);
+                deleteEventButton.setVisibility(View.VISIBLE);
+                checkRegistrations.setVisibility(View.VISIBLE);
+            }else{
+                editEventButton.setVisibility(View.GONE);
+                deleteEventButton.setVisibility(View.GONE);
+                checkRegistrations.setVisibility(View.GONE);
+            }
+        }
     }
 
     private void toggleEditMode(int eventID) {
@@ -270,5 +282,40 @@ public class EventPage extends AppCompatActivity {
             return new User(id, username, email, role);
         }
         return null;
+    }
+
+    private void handleRegistrationToggle(int eventID) {
+        SharedPreferences sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
+        int userID = sharedPreferences.getInt("userID", 0);
+
+        if (dbHelper.isUserRegisteredForEvent(userID, eventID)) {
+            // User already registered, so unregister them
+            int result = dbHelper.deleteRegistration(userID, eventID);
+            if (result > 0) {
+                Toast.makeText(this, "Unregistered from event successfully", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Error in unregistering from event", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            // User not registered, so register them
+            long result = dbHelper.addRegistration(userID, eventID);
+            if (result > 0) {
+                Toast.makeText(this, "Registered for event successfully", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Error in registering for event", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void showRegisteredUsersDialog(int eventID) {
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_registered_users);
+        ListView listView = dialog.findViewById(R.id.list_registered_users);
+
+        List<String> registeredUsers = dbHelper.getRegisteredUsersForEvent(eventID);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, registeredUsers);
+        listView.setAdapter(adapter);
+
+        dialog.show();
     }
 }
