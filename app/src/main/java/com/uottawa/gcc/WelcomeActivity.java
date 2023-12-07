@@ -23,6 +23,8 @@ public class WelcomeActivity extends AppCompatActivity {
     private TextView roleTextView;
     private DatabaseHelper dbHelper;
     private Button manageEventsButton;
+    private Button logOutButton;
+    private Button goToClubs;
     private List<Integer> eventIds = new ArrayList<>();
 
 
@@ -50,29 +52,36 @@ public class WelcomeActivity extends AppCompatActivity {
             welcomeTextView.setText("Welcome " + user.getUsername() + "!");
             roleTextView.setText("You are logged in as a \"" + user.getRole() + "\".");
 
-//            if ("Administrator".equals(user.getRole()) || "Organizer".equals(user.getRole())) {
-//
-//                manageEventsButton.setVisibility(View.VISIBLE);
-//                Log.d("DEBUG", "I am admin!");
-//                manageEventsButton.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        // Navigate to AddEventActivity
-//                        Log.d("DEBUG", "I was triggered!");
-//                        Intent intent = new Intent(WelcomeActivity.this, ManageEvents.class);
-//                        startActivity(intent);
-//                        finish();
-//                    }
-//                });
-//            } else {
-//                manageEventsButton.setVisibility(View.GONE);
-//            }
             manageEventsButton.setVisibility(View.VISIBLE);
             manageEventsButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     // Navigate to AddEventActivity
                     Intent intent = new Intent(WelcomeActivity.this, ManageEvents.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+
+            logOutButton = findViewById(R.id.logOutButton);
+            logOutButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SharedPreferences sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.clear();
+                    editor.apply();
+                    Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+
+            goToClubs = findViewById(R.id.goToClubs);
+            goToClubs.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(WelcomeActivity.this, WelcomeActivity.class);
                     startActivity(intent);
                     finish();
                 }

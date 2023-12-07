@@ -111,6 +111,23 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         userOrganizerValues.put(COLUMN_ROLE, "Organizer");
         db.insert(TABLE_USERS, null, userOrganizerValues);
 
+        // uO accounts
+        ContentValues uOadminValues = new ContentValues();
+        uOadminValues.put(COLUMN_USERNAME, "gccadmin");
+        uOadminValues.put(COLUMN_EMAIL, "admin@uottawa.com");
+        uOadminValues.put(COLUMN_PASSWORD, "GCCRocks!");
+        uOadminValues.put(COLUMN_ROLE, "Administrator");
+        db.insert(TABLE_USERS, null, uOadminValues);
+
+        ContentValues uOuserOrganizerValues = new ContentValues();
+        uOuserOrganizerValues.put(COLUMN_USERNAME, "cyclingaddict");
+        uOuserOrganizerValues.put(COLUMN_EMAIL, "userorganizer@uottawa.com");
+        uOuserOrganizerValues.put(COLUMN_PASSWORD, "cyclingIsLife!");
+        uOuserOrganizerValues.put(COLUMN_ROLE, "Organizer");
+        db.insert(TABLE_USERS, null, uOuserOrganizerValues);
+
+
+
         ContentValues eventValues = new ContentValues();
         eventValues.put(COLUMN_USER_ID, 0);
         eventValues.put(COLUMN_EVENT_TYPE, "Time Trial");
@@ -196,6 +213,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public List<String> getRegisteredUsersForEvent(int eventID) {
         List<String> registeredUsers = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
+        // Relational query
         String query = "SELECT u." + COLUMN_USERNAME +
                 " FROM " + TABLE_USERS + " u INNER JOIN " + TABLE_REGISTRATIONS + " r " +
                 "ON u." + COLUMN_ID + " = r." + COLUMN_USER_ID +

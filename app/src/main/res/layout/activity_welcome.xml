@@ -12,6 +12,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <Button
+            android:id="@+id/logOutButton"
+            android:layout_width="172dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="#C0B7D3"
+            android:text="Log Out" />
+
         <Space
             android:layout_width="match_parent"
             android:layout_height="109dp" />
@@ -46,11 +54,13 @@
             android:backgroundTint="#C0B7D3"
             android:text="Events" />
 
-        <ListView
-            android:id="@+id/eventsListView"
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/goToClubs"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="true" />
+            android:layout_gravity="center"
+            android:backgroundTint="#C0B7D3"
+            android:text="Clubs" />
 
 
     </LinearLayout>

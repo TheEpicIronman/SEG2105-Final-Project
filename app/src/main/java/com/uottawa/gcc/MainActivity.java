@@ -29,11 +29,11 @@ public class MainActivity extends AppCompatActivity {
         // Delete the existing database
         // COMMENT OUT THE BELOW WHEN WORKING ON REGISTRATION OTHERWISE IT WILL GET DELETED AND
         // REVERT TO THE ADMIN AND USER ACCOUNT ONLY
-        this.deleteDatabase(DatabaseHelper.DATABASE_NAME);
-        SharedPreferences sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
+//        this.deleteDatabase(DatabaseHelper.DATABASE_NAME);
+//        SharedPreferences sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        editor.clear();
+//        editor.apply();
 
         dbHelper = new DatabaseHelper(this);  // Initialize DB Helper
 

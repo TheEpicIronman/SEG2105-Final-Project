@@ -28,6 +28,7 @@ public class EventPage extends AppCompatActivity {
     private Button checkRegistrations;
     private DatabaseHelper dbHelper;
     private boolean isEditMode = false;
+    private int creatorID = 0;
     private Spinner eventTypeSpinner;
     private Spinner eventAgeSpinner;
     private Spinner difficultySpinner;
@@ -73,6 +74,7 @@ public class EventPage extends AppCompatActivity {
             int columnIndexAgeRange = cursor.getColumnIndex(DatabaseHelper.COLUMN_AGE_RANGE);
             int columnIndexDifficulty = cursor.getColumnIndex(DatabaseHelper.COLUMN_DIFFICULTY);
             int columnIndexLocation = cursor.getColumnIndex(DatabaseHelper.COLUMN_LOCATION);
+            int columnIndexCreatorID = cursor.getColumnIndex(DatabaseHelper.COLUMN_USER_ID);
 
             String type = cursor.getString(columnIndexType);
             String name = cursor.getString(columnIndexName);
@@ -81,6 +83,7 @@ public class EventPage extends AppCompatActivity {
             String ageRange = cursor.getString(columnIndexAgeRange);
             String difficulty = cursor.getString(columnIndexDifficulty);
             String location = cursor.getString(columnIndexLocation);
+            creatorID = Integer.parseInt(cursor.getString(columnIndexCreatorID));
 
             setSpinnerSelection(eventTypeSpinner, type);
             setSpinnerSelection(eventAgeSpinner, ageRange);
@@ -147,7 +150,7 @@ public class EventPage extends AppCompatActivity {
         });
 
         if (user != null) {
-            if ("Administrator".equals(user.getRole()) || "Organizer".equals(user.getRole())) {
+            if ("Administrator".equals(user.getRole()) || ("Organizer".equals(user.getRole()) && userID == creatorID)) {
                 editEventButton.setVisibility(View.VISIBLE);
                 deleteEventButton.setVisibility(View.VISIBLE);
                 checkRegistrations.setVisibility(View.VISIBLE);
