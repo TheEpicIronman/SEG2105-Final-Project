@@ -1,5 +1,5 @@
 Build Status
-[![Build Status](https://circleci.com/gh/SEG2105F18/ProductCatalog.png?branch=master)](https://app.circleci.com/pipelines/github/TheEpicIronman/SEG2105-Final-Project)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/TheEpicIronman/SEG2105-Final-Project/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/TheEpicIronman/SEG2105-Final-Project/tree/main)
 
 # SEG2105-Final-Project
 # Group 56:
