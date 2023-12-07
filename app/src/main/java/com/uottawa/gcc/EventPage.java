@@ -22,6 +22,7 @@ public class EventPage extends AppCompatActivity {
     private Button editEventButton;
     private Button deleteEventButton;
     private Button backButton;
+    private Button registerEvent;
     private DatabaseHelper dbHelper;
     private boolean isEditMode = false;
     private Spinner eventTypeSpinner;
@@ -109,6 +110,8 @@ public class EventPage extends AppCompatActivity {
                 int result = deleteEventFromDatabase(eventID);
                 if (result > 0) {
                     Toast.makeText(EventPage.this, "Event deleted successfully", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), ManageEvents.class);
+                    startActivity(intent);
                 } else {
                     Toast.makeText(EventPage.this, "Error deleting event", Toast.LENGTH_SHORT).show();
                 }
@@ -127,6 +130,15 @@ public class EventPage extends AppCompatActivity {
 
         backButton = findViewById(R.id.backButtonManage);
         backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ManageEvents.class);
+                startActivity(intent);
+            }
+        });
+
+        registerEvent = findViewById(R.id.registerEvent);
+        registerEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), ManageEvents.class);

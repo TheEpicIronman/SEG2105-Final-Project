@@ -103,21 +103,35 @@
         android:layout_width="match_parent"
         android:layout_height="48dp" />
 
-    <Button
-        android:id="@+id/editEventButton"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:backgroundTint="#C0B7D3"
-        android:text="Edit Event" />
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/deleteEventButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:backgroundTint="#C0B7D3"
-        android:text="Delete Event" />
+        <Button
+            android:id="@+id/editEventButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="#C0B7D3"
+            android:text="Edit Event" />
+
+        <Button
+            android:id="@+id/deleteEventButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="#C0B7D3"
+            android:text="Delete Event" />
+
+        <Button
+            android:id="@+id/registerEvent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="#C0B7D3"
+            android:text="Register For Event" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/backButtonManage"

@@ -42,13 +42,13 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     private static final String CREATE_TABLE_EVENTS = "CREATE TABLE " + TABLE_EVENTS + "("
             + COLUMN_EVENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + COLUMN_USER_ID + " INTEGER NOT NULL," // User ID of the person who created the event
-            + COLUMN_EVENT_TYPE + " TEXT NOT NULL," // Type of the event
-            + COLUMN_EVENT_NAME + " TEXT NOT NULL," // Name of the event
-            + COLUMN_EVENT_DESCRIPTION + " TEXT NOT NULL," // Description of the event
-            + COLUMN_EVENT_DATE + " TEXT NOT NULL," // Date of the event
-            + COLUMN_AGE_RANGE + " TEXT NOT NULL," // Age range for participants
-            + COLUMN_DIFFICULTY + " TEXT NOT NULL," // Difficulty of the event
-            + COLUMN_LOCATION + " TEXT NOT NULL" // Location of the event
+            + COLUMN_EVENT_TYPE + " TEXT NOT NULL,"
+            + COLUMN_EVENT_NAME + " TEXT NOT NULL,"
+            + COLUMN_EVENT_DESCRIPTION + " TEXT NOT NULL,"
+            + COLUMN_EVENT_DATE + " TEXT NOT NULL,"
+            + COLUMN_AGE_RANGE + " TEXT NOT NULL,"
+            + COLUMN_DIFFICULTY + " TEXT NOT NULL,"
+            + COLUMN_LOCATION + " TEXT NOT NULL"
             + ")";
 
 
