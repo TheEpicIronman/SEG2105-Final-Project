@@ -44,6 +44,10 @@ public class EventPage extends AppCompatActivity {
 
         dbHelper = new DatabaseHelper(this);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
+        int userID = sharedPreferences.getInt("userID", 0);
+        User user = getUserDetails(userID);
+
         eventNameEditText = findViewById(R.id.eventNameEditText);
         eventDescriptionEditText = findViewById(R.id.eventDescEditText);
         eventDateEditText = findViewById(R.id.eventDateEditText);
@@ -111,11 +115,21 @@ public class EventPage extends AppCompatActivity {
             }
         });
 
-        backButton = findViewById(R.id.backButton);
+        if (user != null) {
+            if ("Administrator".equals(user.getRole()) || "Organizer".equals(user.getRole())) {
+                editEventButton.setVisibility(View.VISIBLE);
+                deleteEventButton.setVisibility(View.VISIBLE);
+            }else{
+                editEventButton.setVisibility(View.GONE);
+                deleteEventButton.setVisibility(View.GONE);
+            }
+        }
+
+        backButton = findViewById(R.id.backButtonManage);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ManageEvents.class);
                 startActivity(intent);
             }
         });
@@ -191,27 +205,17 @@ public class EventPage extends AppCompatActivity {
         difficultySpinner.setAdapter(difficultyAdapter);
     }
 
-//    private void setSpinnerSelection(Spinner spinner, String value) {
-//        ArrayAdapter<String> adapter = (ArrayAdapter<String>) spinner.getAdapter();
-//        int position = adapter.getPosition(value);
-//        spinner.setSelection(position);
-//    }
-
     private void setSpinnerSelection(Spinner spinner, String value) {
         if (value != null) {
             ArrayAdapter<String> adapter = (ArrayAdapter<String>) spinner.getAdapter();
             int position = adapter.getPosition(value);
 
-            // Check if the value exists in the spinner's adapter
             if (position >= 0) {
                 spinner.setSelection(position);
             } else {
-                // Handle the case where the value is not in the adapter.
-                // You might want to set the spinner to a default position or leave it unchanged.
                 Log.d("EventPage", "Value '" + value + "' not found in spinner.");
             }
         } else {
-            // Handle null value case here
             Log.d("EventPage", "Attempted to set spinner with null value.");
         }
     }
@@ -226,5 +230,33 @@ public class EventPage extends AppCompatActivity {
         ArrayAdapter<String> eventTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, eventTypes);
         eventTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         eventTypeSpinner.setAdapter(eventTypeAdapter);
+    }
+
+    private User getUserDetails(int userId) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String[] projection = {
+                DatabaseHelper.COLUMN_ID,
+                DatabaseHelper.COLUMN_USERNAME,
+                DatabaseHelper.COLUMN_EMAIL,
+                DatabaseHelper.COLUMN_ROLE
+        };
+
+        String selection = DatabaseHelper.COLUMN_ID + " = ?";
+        String[] selectionArgs = { String.valueOf(userId) };
+
+        Cursor cursor = db.query(DatabaseHelper.TABLE_USERS, projection, selection, selectionArgs, null, null, null);
+        if(cursor != null && cursor.moveToFirst()){
+            int columnIndexID = cursor.getColumnIndex(DatabaseHelper.COLUMN_ID);
+            int id = cursor.getInt(columnIndexID);
+            int columnIndexUsername = cursor.getColumnIndex(DatabaseHelper.COLUMN_USERNAME);
+            String username = cursor.getString(columnIndexUsername);
+            int columnIndexEmail = cursor.getColumnIndex(DatabaseHelper.COLUMN_EMAIL);
+            String email = cursor.getString(columnIndexEmail);
+            int columnIndexRole = cursor.getColumnIndex(DatabaseHelper.COLUMN_ROLE);
+            String role = cursor.getString(columnIndexRole);
+            cursor.close();
+            return new User(id, username, email, role);
+        }
+        return null;
     }
 }

@@ -12,39 +12,30 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="109dp" />
-
         <TextView
             android:id="@+id/welcomeTextView"
             android:layout_width="match_parent"
             android:layout_height="147dp"
             android:fontFamily="sans-serif-smallcaps"
             android:gravity="center"
-            android:text="@string/welcome_title"
+            android:text="List Of Events"
             android:textSize="34sp" />
 
-        <TextView
-            android:id="@+id/roleTextView"
-            android:layout_width="match_parent"
-            android:layout_height="81dp"
-            android:fontFamily="sans-serif-smallcaps"
-            android:gravity="center"
-            android:text="@string/role_title"
-            android:textSize="26sp" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="40dp" />
-
         <Button
-            android:id="@+id/manageEventsButton"
+            android:id="@+id/addEventsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:backgroundTint="#C0B7D3"
-            android:text="Events" />
+            android:text="@string/add_events_button_text" />
+
+        <Button
+            android:id="@+id/backButtonEventList"
+            android:layout_width="121dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="#C0B7D3"
+            android:text="Back" />
 
         <ListView
             android:id="@+id/eventsListView"

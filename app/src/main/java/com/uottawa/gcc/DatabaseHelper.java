@@ -76,23 +76,23 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         adminValues.put(COLUMN_USERNAME, "admin");
         adminValues.put(COLUMN_EMAIL, "admin@example.com");
         adminValues.put(COLUMN_PASSWORD, "admin");
-        adminValues.put(COLUMN_ROLE, "administrator");
+        adminValues.put(COLUMN_ROLE, "Administrator");
         db.insert(TABLE_USERS, null, adminValues);
 
         // Regular user/participant account
         ContentValues userParticipantValues = new ContentValues();
-        userParticipantValues.put(COLUMN_USERNAME, "userparticipant");
+        userParticipantValues.put(COLUMN_USERNAME, "user");
         userParticipantValues.put(COLUMN_EMAIL, "userparticipant@example.com");
-        userParticipantValues.put(COLUMN_PASSWORD, "userparticipantpass");
-        userParticipantValues.put(COLUMN_ROLE, "participant");
+        userParticipantValues.put(COLUMN_PASSWORD, "user");
+        userParticipantValues.put(COLUMN_ROLE, "Participant");
         db.insert(TABLE_USERS, null, userParticipantValues);
 
         // Regular user/organizer account
         ContentValues userOrganizerValues = new ContentValues();
-        userOrganizerValues.put(COLUMN_USERNAME, "userorganizer");
+        userOrganizerValues.put(COLUMN_USERNAME, "org");
         userOrganizerValues.put(COLUMN_EMAIL, "userorganizer@example.com");
-        userOrganizerValues.put(COLUMN_PASSWORD, "userorganizerpass");
-        userOrganizerValues.put(COLUMN_ROLE, "organizer");
+        userOrganizerValues.put(COLUMN_PASSWORD, "org");
+        userOrganizerValues.put(COLUMN_ROLE, "Organizer");
         db.insert(TABLE_USERS, null, userOrganizerValues);
 
         ContentValues eventValues = new ContentValues();

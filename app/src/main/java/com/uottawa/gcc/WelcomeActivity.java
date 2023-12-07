@@ -22,7 +22,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private TextView welcomeTextView;
     private TextView roleTextView;
     private DatabaseHelper dbHelper;
-    private Button addEventsButton;
+    private Button manageEventsButton;
     private List<Integer> eventIds = new ArrayList<>();
 
 
@@ -38,7 +38,7 @@ public class WelcomeActivity extends AppCompatActivity {
         // Initialize UI elements
         welcomeTextView = findViewById(R.id.welcomeTextView);
         roleTextView = findViewById(R.id.roleTextView);
-        addEventsButton = findViewById(R.id.addEventsButton);
+        manageEventsButton = findViewById(R.id.manageEventsButton);
 
         SharedPreferences sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
         int userID = sharedPreferences.getInt("userID", 0);
@@ -50,73 +50,35 @@ public class WelcomeActivity extends AppCompatActivity {
             welcomeTextView.setText("Welcome " + user.getUsername() + "!");
             roleTextView.setText("You are logged in as a \"" + user.getRole() + "\".");
 
-            if ("administrator".equals(user.getRole())) {
-
-                addEventsButton.setVisibility(View.VISIBLE);
-                Log.d("DEBUG", "I am admin!");
-                addEventsButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // Navigate to AddEventActivity
-                        Log.d("DEBUG", "I was triggered!");
-                        Intent intent = new Intent(WelcomeActivity.this, AddEventActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                });
-            } else {
-                addEventsButton.setVisibility(View.GONE);
-            }
+//            if ("Administrator".equals(user.getRole()) || "Organizer".equals(user.getRole())) {
+//
+//                manageEventsButton.setVisibility(View.VISIBLE);
+//                Log.d("DEBUG", "I am admin!");
+//                manageEventsButton.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        // Navigate to AddEventActivity
+//                        Log.d("DEBUG", "I was triggered!");
+//                        Intent intent = new Intent(WelcomeActivity.this, ManageEvents.class);
+//                        startActivity(intent);
+//                        finish();
+//                    }
+//                });
+//            } else {
+//                manageEventsButton.setVisibility(View.GONE);
+//            }
+            manageEventsButton.setVisibility(View.VISIBLE);
+            manageEventsButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Navigate to AddEventActivity
+                    Intent intent = new Intent(WelcomeActivity.this, ManageEvents.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
         }
-
-        populateEventsListView();
     }
-
-    private void populateEventsListView() {
-        List<String> eventDetailsList = new ArrayList<>();
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + DatabaseHelper.TABLE_EVENTS, null);
-
-        if (cursor.moveToFirst()) {
-            String[] columnNames = cursor.getColumnNames();
-            Log.d("DEBUG", "Column names: " + Arrays.toString(columnNames));
-            do {
-                int columnIndexID = cursor.getColumnIndex(DatabaseHelper.COLUMN_EVENT_ID);
-                int id = cursor.getInt(columnIndexID);
-                int columnIndexType = cursor.getColumnIndex(DatabaseHelper.COLUMN_EVENT_TYPE);
-                String type = cursor.getString(columnIndexType);
-                int columnIndexDetails = cursor.getColumnIndex(DatabaseHelper.COLUMN_EVENT_NAME);
-                String details = cursor.getString(columnIndexDetails);
-                int columnIndexDate = cursor.getColumnIndex(DatabaseHelper.COLUMN_EVENT_DATE);
-                String date = cursor.getString(columnIndexDate);
-
-                // Combine event details into a single string for display
-                String eventDetails = "ID: " + id + ", Type: " + type + ", Name: " + details + ", Date: " + date;
-                eventDetailsList.add(eventDetails);
-
-                eventIds.add(id);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, eventDetailsList);
-        ListView listView = findViewById(R.id.eventsListView);
-        listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Retrieve the ID of the clicked item
-                int eventId = eventIds.get(position);
-
-                // Start a new activity and pass the ID
-                Intent intent = new Intent(getApplicationContext(), EventPage.class);
-                intent.putExtra("EVENT_ID", eventId);
-                startActivity(intent);
-            }
-        });
-    }
-
 
     private User getUserDetails(int userId) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();

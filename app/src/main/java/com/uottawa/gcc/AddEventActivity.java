@@ -16,7 +16,7 @@ import java.util.List;
 
 public class AddEventActivity extends AppCompatActivity {
     private Button addEventButton;
-    private Button backButton;
+    private Button backButtonAdd;
     private DatabaseHelper dbHelper;
     private Spinner eventTypeSpinner;
     private Spinner eventAgeSpinner;
@@ -48,16 +48,16 @@ public class AddEventActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 addEvent();
-                Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ManageEvents.class);
                 startActivity(intent);
             }
         });
 
-        backButton = findViewById(R.id.backButton);
-        backButton.setOnClickListener(new View.OnClickListener() {
+        backButtonAdd = findViewById(R.id.backButtonAdd);
+        backButtonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ManageEvents.class);
                 startActivity(intent);
             }
         });
