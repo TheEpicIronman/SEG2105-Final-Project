@@ -6,3 +6,5 @@
 	Yasna Karimi - 300312772
 
 https://github.com/TheEpicIronman/SEG2105-Final-Project
+
+link to the previous repository: https://github.com/yasnakj/GCC_app.git 
