@@ -25,6 +25,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private Button manageEventsButton;
     private Button logOutButton;
     private Button goToClubs;
+    private Button editProfileButton;
     private List<Integer> eventIds = new ArrayList<>();
 
 
@@ -82,6 +83,16 @@ public class WelcomeActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(WelcomeActivity.this, WelcomeActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+
+            editProfileButton = findViewById(R.id.editProfileButton);
+            editProfileButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(WelcomeActivity.this, PersonalProfile.class);
                     startActivity(intent);
                     finish();
                 }

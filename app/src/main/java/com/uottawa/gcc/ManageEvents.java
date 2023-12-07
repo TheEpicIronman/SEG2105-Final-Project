@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.SharedPreferences;
@@ -23,6 +24,9 @@ public class ManageEvents extends AppCompatActivity {
     private Button addEventsButton;
     private Button backButton;
     private List<Integer> eventIds = new ArrayList<>();
+    private ArrayAdapter<String> adapter;
+    private List<String> eventDetailsList = new ArrayList<>();
+    private SearchView searchView;
 
 
 
@@ -70,9 +74,13 @@ public class ManageEvents extends AppCompatActivity {
         });
 
         populateEventsListView();
+        setupSearchView();
     }
 
     private void populateEventsListView() {
+        eventDetailsList.clear();
+        eventIds.clear();
+
         List<String> eventDetailsList = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + DatabaseHelper.TABLE_EVENTS, null);
@@ -99,7 +107,8 @@ public class ManageEvents extends AppCompatActivity {
         }
         cursor.close();
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, eventDetailsList);
+        // Throw data into list for search and adapter
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, eventDetailsList);
         ListView listView = findViewById(R.id.eventsListView);
         listView.setAdapter(adapter);
 
@@ -145,5 +154,24 @@ public class ManageEvents extends AppCompatActivity {
         }
         return null;
     }
+
+    private void setupSearchView() {
+        searchView = findViewById(R.id.searchView);
+
+        // Simple search https://developer.android.com/reference/android/widget/SearchView.OnQueryTextListener#public-methods_1
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                adapter.getFilter().filter(query);
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+    }
+
 
 }

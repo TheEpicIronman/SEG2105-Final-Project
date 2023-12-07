@@ -36,6 +36,9 @@
         <activity
             android:name=".ManageEvents"
             android:exported="false" />
+        <activity
+            android:name=".PersonalProfile"
+            android:exported="false" />
     </application>
 
 </manifest>

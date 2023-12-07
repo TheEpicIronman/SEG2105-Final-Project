@@ -25,6 +25,10 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public static final String COLUMN_EMAIL = "email";
     public static final String COLUMN_PASSWORD = "password";
     public static final String COLUMN_ROLE = "role";
+    public static final String COLUMN_SOCIAL_MEDIA_URL = "social_media_url";
+    public static final String COLUMN_PHONE_NUMBER = "phone_number";
+    public static final String COLUMN_NAME = "name";
+
 
     // Events column names
     public static final String COLUMN_EVENT_ID = "event_id";
@@ -49,7 +53,11 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             + COLUMN_USERNAME + " TEXT NOT NULL,"
             + COLUMN_EMAIL + " TEXT,"
             + COLUMN_PASSWORD + " TEXT NOT NULL,"
-            + COLUMN_ROLE + " TEXT NOT NULL" + ")";
+            + COLUMN_ROLE + " TEXT NOT NULL,"
+            + COLUMN_SOCIAL_MEDIA_URL + " TEXT,"
+            + COLUMN_PHONE_NUMBER + " TEXT,"
+            + COLUMN_NAME + " TEXT"
+            + ")";
     private static final String CREATE_TABLE_EVENTS = "CREATE TABLE " + TABLE_EVENTS + "("
             + COLUMN_EVENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + COLUMN_USER_ID + " INTEGER NOT NULL," // User ID of the person who created the event
@@ -230,5 +238,14 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         return registeredUsers;
     }
 
+    public int updateProfile(int userID, String name, String phone, String social) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NAME, name);
+        values.put(COLUMN_PHONE_NUMBER, phone);
+        values.put(COLUMN_SOCIAL_MEDIA_URL, social);
+
+        return db.update(TABLE_USERS, values, COLUMN_ID + "=?", new String[]{String.valueOf(userID)});
+    }
 
 }

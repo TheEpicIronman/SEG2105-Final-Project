@@ -15,7 +15,7 @@
         <TextView
             android:id="@+id/welcomeTextView"
             android:layout_width="match_parent"
-            android:layout_height="147dp"
+            android:layout_height="93dp"
             android:fontFamily="sans-serif-smallcaps"
             android:gravity="center"
             android:text="List Of Events"
@@ -36,6 +36,12 @@
             android:layout_gravity="center"
             android:backgroundTint="#C0B7D3"
             android:text="Back" />
+
+        <SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:queryHint="Search events" />
 
         <ListView
             android:id="@+id/eventsListView"
