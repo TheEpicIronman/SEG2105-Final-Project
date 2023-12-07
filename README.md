@@ -1,3 +1,6 @@
+Build Status
+[![Build Status](https://circleci.com/gh/SEG2105F18/ProductCatalog.png?branch=master)](https://app.circleci.com/pipelines/github/TheEpicIronman/SEG2105-Final-Project)
+
 # SEG2105-Final-Project
 # Group 56:
 	Shanzay Amir - 300282079
