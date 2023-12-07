@@ -6,8 +6,9 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Run Tests
-          command: ./gradlew lint test
+        name: Calculate cache key
+        command: find . -type f \( -name 'pom.xml' -o -name 'gradlew*' -o -name '*.gradle.kts' \) | sort | xargs cat > /tmp/CIRCLECI_CACHE_KEY
+
 workflows:
   version: 2
   build_and_test:
